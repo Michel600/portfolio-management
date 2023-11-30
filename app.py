@@ -24,7 +24,7 @@ with monte_carlo:
 	st.header("1-PARAMETERS")
 	nb_simulation, corr, component, maturity =st.columns(4)
 	with nb_simulation:
-		N = st.number_input("Number of simulations",value=100)
+		N = st.number_input("Number of simulations",value=10000)
 	with corr:
 		rho = st.number_input("Global correlation", value=0.11)
 	with component:
