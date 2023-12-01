@@ -60,13 +60,6 @@ def MC(N, n, rho, Xs, rhos, B1Y, B3Y, B5Y, EAD, LGD, m):
 
 
 
-
-
-
-
-
-
-
 def style_dataframe(df):
     # Create a style DataFrame
     styled_df = df.style

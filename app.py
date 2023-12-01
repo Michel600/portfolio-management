@@ -83,13 +83,13 @@ with monte_carlo:
 	statistics=pd.DataFrame({'Indicator': ['Expected_Loss','Standard_Error','VAR(IC)', 'Expected_ShortFall'],'Value': [Expected_Loss,Standard_Error,VAR, Expected_ShortFall]})
 
 	a1, a2 = st.columns(2)
-	a1.subheader('3-TABLE PORTFOLIO, DEFAULT PROBABILITY (1,3 & 5 YEARS), Xs & Rhos FOR EAH COMPONENT', divider='rainbow')
+	a1.subheader('2-TABLE PORTFOLIO, DEFAULT PROBABILITY (1,3 & 5 YEARS), Xs & Rhos FOR EAH COMPONENT', divider='rainbow')
 	a1.table(style_dataframe(FUSION1.head(10)))
-	a2.subheader('4-RESULTS WITH DEFAULT PROBABILITY FOR THE MATURITY INDICATED (1,3 OR 5) ', divider='rainbow')
+	a2.subheader('3-RESULTS WITH DEFAULT PROBABILITY FOR THE MATURITY INDICATED (1,3 OR 5) ', divider='rainbow')
 	a2.table(style_dataframe(Results.head(10)))
 
 
-	st.subheader('INDICATORS', divider='rainbow')
+	st.subheader('4-INDICATORS', divider='rainbow')
 	st.table(style_dataframe(statistics))
 	#Result1.write(Results)
 	#Result2.write(statistics)
