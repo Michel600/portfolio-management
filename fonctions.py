@@ -7,11 +7,9 @@ import streamlit as st
 
 # We run a simulation with this steps
 
-# Step 1: Generate X, the same for each component of our portfolio
-X=np.random.normal(0, 1)
+# Step 1: Generate X, the same for each component of our portfolio (in the fonction MC()) 
 
-# Step 2: Generate n epsilons for each component of our portfolio
-epsilons= np.random.normal(0, 1, n)
+# Step 2: Generate n epsilons for each component of our portfolio  (in the fonction MC())
 
 # Step 3: Generate Zi for each component of our portfolio
 def generate_Z(n, rho, rhos, Xs, X, epsilons):
@@ -49,8 +47,8 @@ def MC(N, n, rho, Xs, rhos, B1Y, B3Y, B5Y, EAD, LGD, m, X, epsilons):
     
     #Matrix filling
     for j in range(N):
-        X=np.random.normal(0, 1)
-        epsilons=np.random.normal(0, 1,n) 
+        X=np.random.normal(0, 1) #Generate X, the same for each component of our portfolio 
+        epsilons=np.random.normal(0, 1,n)  #Generate n epsilons for each component of our portfolio
         Z_list =generate_Z(n, rho, rhos,Xs,X,epsilons)
         defaults= calculate_default(n, m, Z_list, B1Y, B3Y, B5Y)
         losses=calculate_loss(n, EAD, LGD, defaults)
