@@ -19,9 +19,11 @@ st.title("PORTFOLIO MANAGEMENT- PROJECT 1")
 st.markdown("Implemented by: NADEZHDA DOBREVA & KOFFI KABLAN KAN MAX MICHEL & Supervised by: P.BOUSABAA Abdelkader")
 
 monte_carlo, credit = st.tabs(["I-MONTE-CARLO ON OUR PORTFOLIO", "II-CREDIT DERIVATES"])
+
+#First page
 with monte_carlo:
 	st.title("I-MONTE-CARLO ON OUR PORTFOLIO")
-	st.header("1-PARAMETERS")
+	st.header("1-PARAMETERS (FOR I & II EXCEPT MATURITY )")
 	nb_simulation, corr, component, maturity =st.columns(4)
 	with nb_simulation:
 		N = st.number_input("Number of simulations",value=10000)
@@ -138,10 +140,10 @@ with monte_carlo:
 
 
 
-#seconde page
+#Second page
 with credit:
 	st.title("II-CREDIT DERIVATES")
-	st.header("1-PARAMETERS")
+	st.header("1-PARAMETERS (FOR II ONLY )")
 	strike_div, size_div, m1_div =st.columns(3)
 	with strike_div:
 		strike = st.number_input("Strike",  value=7)
@@ -155,6 +157,7 @@ with credit:
 	#st.write(Results_credit)
 
 	
+	# Cdo slices
 	# Create a matrix with N rows and 4 columns
 	columns=['loss_portfolio(%)','/Strike(%)','/Size(%)','/Tranche(%)']
 	Tranche= pd.DataFrame(np.empty((N,4)), columns=columns)
@@ -164,8 +167,7 @@ with credit:
 	Tranche['/Strike(%)']=[sorted([P, strike])[-1]-strike for P in Tranche['loss_portfolio(%)']] #This column takes 0 if the first column is below the strike or the difference between the first column and the strike if it is above the strike
 	Tranche['/Size(%)']=[min(S,size) for S in Tranche['/Strike(%)']] #This column takes the minimum between the second column and the size
 	Tranche['/Tranche(%)']=[(T/size)*100 for T in Tranche['/Size(%)']] #we calculate the price of the Collateralized Debt Obligation (CDO) by dividing the third column by the size
-	#st.write(Tranche)
-
+	
 
 	c1, c2 = st.columns(2)
 	c1.subheader('2-LOSS PORTFOLIO WITH DEFAULT PROBABILITY FOR THE MATURITY INDICATED (1,3 OR 5)', divider='rainbow')
@@ -174,8 +176,9 @@ with credit:
 	c2.table(style_dataframe(Tranche.head(10)))
 
 
-	st.subheader('4-STATISTICS', divider='rainbow')
+
 	#Risk indicators
+	st.subheader('4-STATISTICS', divider='rainbow')
 	Expected_Price=Tranche['/Tranche(%)'].mean()#average of  the price of the Collateralized Debt Obligation (CDO)
 	Standard_Error_credit=Tranche['/Tranche(%)'].std() #standard error of the price of the Collateralized Debt Obligation (CDO)
 	VAR_credit =Tranche['/Tranche(%)'].quantile(IC)  #Value-at-risk (quantile of order 0.99 of the price of the CDO  )
@@ -184,8 +187,11 @@ with credit:
 	#st.write(statistics_credit)
 	st.table(style_dataframe(statistics_credit))
 
-	#st.header('5-PRICE CONVERGENCE CHART')
-	#Calculations to plot the graph
+
+	
+
+
+	#Calculations to plot the graph of convergence
 	#Create a matrix with N rows and 5 columns
 	columns=['Rolling mean','sigma(N)','Bound-','Bound+','spread']
 	val_credit= pd.DataFrame(np.empty((N,5)), columns=columns)
@@ -198,19 +204,13 @@ with credit:
 	    val_credit.loc[i, 'Bound-'] = val_credit.loc[i, 'Rolling mean'] - norm.ppf(IC) * (val_credit.loc[i, 'sigma(N)'] / mt.sqrt(i+1)) #Negative confidence interval bound
 	    val_credit.loc[i, 'Bound+'] = val_credit.loc[i, 'Rolling mean'] + norm.ppf(IC) * (val_credit.loc[i, 'sigma(N)'] / mt.sqrt(i+1)) #Positive confidence interval bound
 	    val_credit.loc[i, 'spread'] = val_credit.loc[i, 'Bound+'] - val_credit.loc[i, 'Bound-'] #spread between the confidence interval bounds
-	        
+	   
+
 	# Data to Plot the Convergence Graph
-	x_credit =range(N) # the number of simulations for the x-axis
-
+	x_credit = list(range(N))  # the number of simulations for the x-axis
 	y1_credit = val_credit['Rolling mean'] #values for y-axis
-	y2_credit = val_credit['Bound-'] #values for y-axis 
-	y3_credit = val_credit['Bound+'] #values for y-axis 
-
-	# Données
-	x_credit = list(range(N))  # Convert range to list
-	y1_credit = val_credit['Rolling mean']
-	y2_credit = val_credit['Bound-']
-	y3_credit = val_credit['Bound+']
+	y2_credit = val_credit['Bound-'] #values for y-axis
+	y3_credit = val_credit['Bound+'] #values for y-axis
 
 	# Create figure
 	fig_credit = go.Figure()
