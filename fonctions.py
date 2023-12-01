@@ -8,18 +8,14 @@ import streamlit as st
 # We run a simulation with this steps
 
 # Step 1: Generate X, the same for each component of our portfolio
-def generate_X():
-    return np.random.normal(0, 1)
+X=np.random.normal(0, 1)
 
 # Step 2: Generate n epsilons for each component of our portfolio
-def generate_epsilon(n):
-    return np.random.normal(0, 1, n)
+epsilons= np.random.normal(0, 1, n)
 
 # Step 3: Generate Zi for each component of our portfolio
-def generate_Z(n, rho, rhos, Xs):
-    eps = generate_epsilon(n)
-    X = generate_X()
-    Z_list = [mt.sqrt(rho) * X + mt.sqrt(rhos[i] - rho) * Xs[i] + mt.sqrt(1 - rhos[i]) * eps[i] for i in range(n)]
+def generate_Z(n, rho, rhos, Xs,X,epsilons):
+    Z_list = [mt.sqrt(rho) * X + mt.sqrt(rhos[i] - rho) * Xs[i] + mt.sqrt(1 - rhos[i]) * epsilons[i] for i in range(n)]
     return Z_list
 
 # Step 4: Generate a binary variable indicating default based on maturity
@@ -39,15 +35,12 @@ def calculate_loss(n, EAD, LGD, defaults):
     return [defaults[i] * EAD[i] * LGD[i] for i in range(n)]
 
 # Step 6: Calculate the total loss of our portfolio
-def calculate_total_loss(n, EAD, LGD, m, rho, rhos, Xs, B1Y, B3Y, B5Y):
-    Z_list = generate_Z(n, rho, rhos, Xs)
-    defaults = calculate_default(n, m, Z_list, B1Y, B3Y, B5Y)
-    losses = calculate_loss(n, EAD, LGD, defaults)
+def calculate_total_loss(losses):
     return sum(losses)
 
 
 # We run the N simulations
-def MC(N, n, rho, Xs, rhos, B1Y, B3Y, B5Y, EAD, LGD, m):
+def MC(N, n, rho, Xs, rhos, B1Y, B3Y, B5Y, EAD, LGD, m,X,epsilons):
     #Create a matrix with N rows and 4n+2  columns
     columns = ['X'] + [f'epsilon{i}' for i in range(1, n + 1)] + [f'Z{i}' for i in range(1, n + 1)] + \
               [f'Default{i}' for i in range(1, n + 1)] + [f'Loss{i}' for i in range(1, n + 1)] + ['Loss_Portfolio']
@@ -56,10 +49,12 @@ def MC(N, n, rho, Xs, rhos, B1Y, B3Y, B5Y, EAD, LGD, m):
     
     #Matrix filling
     for j in range(N):
-        X, epsilons, Z_list = generate_X(), generate_epsilon(n), generate_Z(n, rho, rhos, Xs)
+        X=np.random.normal(0, 1)
+        epsilons=np.random.normal(0, 1,n) 
+        Z_list =generate_Z(n, rho, rhos,Xs,X,epsilons)
         defaults= calculate_default(n, m, Z_list, B1Y, B3Y, B5Y)
         losses=calculate_loss(n, EAD, LGD, defaults)
-        total_loss = calculate_total_loss(n, EAD, LGD, m, rho, rhos, Xs, B1Y, B3Y, B5Y)
+        total_loss = calculate_total_loss(losses)
 
         matrice.loc[j] = [X, *epsilons, *Z_list, *defaults, *losses, total_loss]
 
