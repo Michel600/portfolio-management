@@ -70,7 +70,7 @@ with monte_carlo:
 	#st.title("4-RESULTS WITH DEFAULT PROBABILITY OF 3 YEARS")
 
 	#Results of each simulation. At the end ,we have the loss of portfolio for each simulation
-	Results= MC(N, n, rho, Xs, rhos, B1Y, B3Y, B5Y, EAD, LGD, m, X, epsilons)
+	Results= MC(N, n, rho, Xs, rhos, B1Y, B3Y, B5Y, EAD, LGD, m)
 
 	#Risk indicators
 	Expected_Loss=Results['Loss_Portfolio'].mean() #average of the loss distribution
@@ -151,7 +151,7 @@ with credit:
 		m_credit = st.number_input("maturity(years)",  value=5)
 
 	#Results of each simulation. At the end ,we have the loss of portfolio for each simulation
-	Results_credit= MC(N, n, rho, Xs, rhos, B1Y, B3Y, B5Y, EAD, LGD, m=m_credit, X, epsilons)
+	Results_credit= MC(N, n, rho, Xs, rhos, B1Y, B3Y, B5Y, EAD, LGD, m=m_credit)
 	#st.write(Results_credit)
 
 	
@@ -207,12 +207,12 @@ with credit:
 	y3_credit = val_credit['Bound+'] #values for y-axis 
 
 	# Données
-	x_credit = list(range(N))  # Convertir range en liste
+	x_credit = list(range(N))  # Convert range to list
 	y1_credit = val_credit['Rolling mean']
 	y2_credit = val_credit['Bound-']
 	y3_credit = val_credit['Bound+']
 
-	# Créer la figure
+	# Create figure
 	fig_credit = go.Figure()
 	# Ajouter les traces au graphique
 	fig_credit.add_trace(go.Scatter(x=x_credit, y=y1_credit, mode='lines', name='Rolling mean'))

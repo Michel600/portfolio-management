@@ -7,9 +7,9 @@ import streamlit as st
 
 # We run a simulation with this steps
 
-# Step 1: Generate X, the same for each component of our portfolio (in the fonction MC()) 
+# Step 1: Generate X, the same for each component of our portfolio (in the fUnction MC()) 
 
-# Step 2: Generate n epsilons for each component of our portfolio  (in the fonction MC())
+# Step 2: Generate n epsilons for each component of our portfolio  (in the fUnction MC())
 
 # Step 3: Generate Zi for each component of our portfolio
 def generate_Z(n, rho, rhos, Xs, X, epsilons):
@@ -38,7 +38,7 @@ def calculate_total_loss(losses):
 
 
 # We run the N simulations
-def MC(N, n, rho, Xs, rhos, B1Y, B3Y, B5Y, EAD, LGD, m, X, epsilons):
+def MC(N, n, rho, Xs, rhos, B1Y, B3Y, B5Y, EAD, LGD, m):
     #Create a matrix with N rows and 4n+2  columns
     columns = ['X'] + [f'epsilon{i}' for i in range(1, n + 1)] + [f'Z{i}' for i in range(1, n + 1)] + \
               [f'Default{i}' for i in range(1, n + 1)] + [f'Loss{i}' for i in range(1, n + 1)] + ['Loss_Portfolio']
@@ -58,19 +58,28 @@ def MC(N, n, rho, Xs, rhos, B1Y, B3Y, B5Y, EAD, LGD, m, X, epsilons):
 
     return matrice
 
+
+
+
+
+
+
+
+
+
 def style_dataframe(df):
-    # Créer un DataFrame de style
+    # Create a style DataFrame
     styled_df = df.style
     #styled_df.set_table_attributes("style='display:inline").set_caption('Top 10 Fields of Research by Aggregated Funding Amount')
 
-    # Colorier les entêtes, les index et les lignes du corps en bleu nuit
+    # Color headers, indexes and body lines in midnight blue
     styled_df.set_table_styles([
         {'selector': 'td:hover','props': [('background-color', '#7dbef4')]},
         {'selector': '.index_name','props': 'font-style: italic; color: darkgrey; font-weight:normal;'},
         {'selector': 'th:not(.index_name)','props': 'background-color: #3a416c; color: white;'},
     ], overwrite=False)
 
-    # Colorier les lignes du corps en alternance en gris et blanc
+    # Color the body lines alternately in gray and white
     styled_df.set_properties(**{'background-color': 'white', 'color': 'black'})
     styled_df.set_properties(subset=pd.IndexSlice[::2, :], **{'background-color': '#ebecf0'})
     styled_df.set_properties(subset=pd.IndexSlice[1::2, :], **{'background-color': '#f9fafd'})
