@@ -28,12 +28,12 @@ with monte_carlo:
 	with corr:
 		rho = st.number_input("Global correlation", value=0.11)
 	with component:
-		n = st.number_input("Number of componants", value=250)
+		IC = st.number_input("Confidence interval level", value=0.99)
 	with maturity:
 		m = st.number_input("Maturity(years)",  value=3)
 	Xs1=np.random.normal(0,1,6) #we generate Xs for each financial sector 
 	rhos1=[0.23,0.32,0.15,0.18,0.2,0.16] #correlation for each financial sector
-	IC=0.99 #confidence interval level
+	n=250 #Number of composants in our portfolio
 
 	
 	#Portfolio table view
@@ -67,7 +67,7 @@ with monte_carlo:
 	B3Y=[norm.ppf(x) for x in PD3Y] #Default Barrier for 3-year Probability of default 
 	B5Y=[norm.ppf(x) for x in PD5Y] #Default Barrier for 5-year Probability of default 
 
-	#st.title("4-RESULTS WITH DEFAULT PROBABILITY OF 3 YEARS")
+
 
 	#Results of each simulation. At the end ,we have the loss of portfolio for each simulation
 	Results= MC(N, n, rho, Xs, rhos, B1Y, B3Y, B5Y, EAD, LGD, m)
@@ -75,15 +75,15 @@ with monte_carlo:
 	#Risk indicators
 	Expected_Loss=Results['Loss_Portfolio'].mean() #average of the loss distribution
 	Standard_Error=Results['Loss_Portfolio'].std() #standard error of the loss distribution
-	VAR=Results['Loss_Portfolio'].quantile(IC)   #Value-at-risk (quantile of order 0.99 of the loss distribution )
+	VAR=Results['Loss_Portfolio'].quantile(IC)   #Value-at-risk (quantile of order IC of the loss distribution )
 	Expected_ShortFall=Results['Loss_Portfolio'][Results['Loss_Portfolio'] > VAR].mean() #Expected-Shortfall (average of the losses above the var)
 
 	statistics=pd.DataFrame({'Indicator': ['Expected_Loss','Standard_Error','VAR(IC)', 'Expected_ShortFall'],'Value': [Expected_Loss,Standard_Error,VAR, Expected_ShortFall]})
 
 	a1, a2 = st.columns(2)
-	a1.subheader('3-TABLE PORTFOLIO, DEFAULT PROBABILITY, Xs & Rhos', divider='rainbow')
+	a1.subheader('3-TABLE PORTFOLIO, DEFAULT PROBABILITY (1,3 & 5 YEARS), Xs & Rhos FOR EAH COMPONENT', divider='rainbow')
 	a1.table(style_dataframe(FUSION1.head(10)))
-	a2.subheader('4-RESULTS WITH DEFAULT PROBABILITY OF 3 YEARS', divider='rainbow')
+	a2.subheader('4-RESULTS WITH DEFAULT PROBABILITY FOR THE MATURITY INDICATED (1,3 OR 5) ', divider='rainbow')
 	a2.table(style_dataframe(Results.head(10)))
 
 
@@ -168,7 +168,7 @@ with credit:
 
 
 	c1, c2 = st.columns(2)
-	c1.subheader('2-LOSS PORTFOLIO WITH DEFAULT PROBABILITY OF 5 YEARS', divider='rainbow')
+	c1.subheader('2-LOSS PORTFOLIO WITH DEFAULT PROBABILITY FOR THE MATURITY INDICATED (1,3 OR 5)', divider='rainbow')
 	c1.table(style_dataframe(Results_credit.head(10)))
 	c2.subheader('3-CDO SLICES \n.', divider='rainbow')
 	c2.table(style_dataframe(Tranche.head(10)))
