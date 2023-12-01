@@ -143,7 +143,7 @@ with credit:
 	st.title("II-CREDIT DERIVATES")
 	st.header("1-PARAMETERS")
 	strike_div, size_div, m1_div =st.columns(3)
-	with strike_div:cdcd
+	with strike_div:
 		strike = st.number_input("Strike",  value=7)
 	with size_div:
 		size = st.number_input("Size",  value=2)
