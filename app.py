@@ -70,7 +70,7 @@ with monte_carlo:
 	#st.title("4-RESULTS WITH DEFAULT PROBABILITY OF 3 YEARS")
 
 	#Results of each simulation. At the end ,we have the loss of portfolio for each simulation
-	Results= MC(N, n, rho, Xs, rhos, B1Y, B3Y, B5Y, EAD, LGD, m,X,epsilons)
+	Results= MC(N, n, rho, Xs, rhos, B1Y, B3Y, B5Y, EAD, LGD, m, X, epsilons)
 
 	#Risk indicators
 	Expected_Loss=Results['Loss_Portfolio'].mean() #average of the loss distribution
@@ -143,7 +143,7 @@ with credit:
 	st.title("II-CREDIT DERIVATES")
 	st.header("1-PARAMETERS")
 	strike_div, size_div, m1_div =st.columns(3)
-	with strike_div:
+	with strike_div:cdcd
 		strike = st.number_input("Strike",  value=7)
 	with size_div:
 		size = st.number_input("Size",  value=2)
@@ -151,7 +151,7 @@ with credit:
 		m_credit = st.number_input("maturity(years)",  value=5)
 
 	#Results of each simulation. At the end ,we have the loss of portfolio for each simulation
-	Results_credit =MC(N, n, rho, Xs, rhos, B1Y, B3Y, B5Y, EAD, LGD, m=m_credit,X,epsilons)
+	Results_credit= MC(N, n, rho, Xs, rhos, B1Y, B3Y, B5Y, EAD, LGD, m=m_credit, X, epsilons)
 	#st.write(Results_credit)
 
 	
