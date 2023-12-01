@@ -14,7 +14,7 @@ X=np.random.normal(0, 1)
 epsilons= np.random.normal(0, 1, n)
 
 # Step 3: Generate Zi for each component of our portfolio
-def generate_Z(n, rho, rhos, Xs,X,epsilons):
+def generate_Z(n, rho, rhos, Xs, X, epsilons):
     Z_list = [mt.sqrt(rho) * X + mt.sqrt(rhos[i] - rho) * Xs[i] + mt.sqrt(1 - rhos[i]) * epsilons[i] for i in range(n)]
     return Z_list
 
@@ -40,7 +40,7 @@ def calculate_total_loss(losses):
 
 
 # We run the N simulations
-def MC(N, n, rho, Xs, rhos, B1Y, B3Y, B5Y, EAD, LGD, m,X,epsilons):
+def MC(N, n, rho, Xs, rhos, B1Y, B3Y, B5Y, EAD, LGD, m, X, epsilons):
     #Create a matrix with N rows and 4n+2  columns
     columns = ['X'] + [f'epsilon{i}' for i in range(1, n + 1)] + [f'Z{i}' for i in range(1, n + 1)] + \
               [f'Default{i}' for i in range(1, n + 1)] + [f'Loss{i}' for i in range(1, n + 1)] + ['Loss_Portfolio']
